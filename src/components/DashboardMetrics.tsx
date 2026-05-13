@@ -88,8 +88,8 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
     if (active && payload && payload.length) {
       const title = payload[0]?.payload?.fullName || label;
       return (
-        <div className="bg-[#0f1115] border border-white/10 p-3 rounded-lg shadow-xl">
-          <p className="text-white font-medium mb-1">{title}</p>
+        <div className="bg-white dark:bg-[#0f1115] border border-slate-200 dark:border-white/10 p-3 rounded-lg shadow-xl">
+          <p className="text-slate-800 dark:text-white font-medium mb-1">{title}</p>
           {payload.map((p: any, idx: number) => (
             <p key={idx} style={{ color: p.color || p.fill }} className="text-sm">
               {p.name}: <span className="font-bold">{p.value}{p.name === 'progress' || p.name === 'Avg Progress' ? '%' : ''}</span>
@@ -101,44 +101,55 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
     return null;
   };
 
+  // Interpolate color from Blue (start) to Red (end)
+  const getPhaseColor = (index: number, total: number) => {
+    if (total <= 1) return "#3b82f6";
+    const ratio = index / (total - 1);
+    // Blue: 59, 130, 246 -> Red: 239, 68, 68
+    const r = Math.round(59 + (239 - 59) * ratio);
+    const g = Math.round(130 + (68 - 130) * ratio);
+    const b = Math.round(246 + (68 - 246) * ratio);
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   return (
     <div className="flex flex-col gap-6 mb-12">
       {/* Overview Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="glass-panel p-5 rounded-xl flex flex-col justify-center items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mb-3 text-emerald-500">
+          <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-blue-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-500">
             <CheckCircle2 size={20} />
           </div>
-          <span className="text-3xl font-bold mb-1">{statusCounts["Done"]}</span>
-          <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Completed</span>
+          <span className="text-3xl font-bold mb-1 text-slate-800 dark:text-white">{statusCounts["Done"]}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Completed</span>
         </div>
         <div className="glass-panel p-5 rounded-xl flex flex-col justify-center items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mb-3 text-blue-400">
+          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center mb-3 text-blue-600 dark:text-blue-400">
             <CircleDashed size={20} />
           </div>
-          <span className="text-3xl font-bold mb-1">{statusCounts["In Progress"]}</span>
-          <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">In Progress</span>
+          <span className="text-3xl font-bold mb-1 text-slate-800 dark:text-white">{statusCounts["In Progress"]}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">In Progress</span>
         </div>
         <div className="glass-panel p-5 rounded-xl flex flex-col justify-center items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center mb-3 text-amber-500">
+          <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-500/10 flex items-center justify-center mb-3 text-amber-600 dark:text-amber-500">
             <AlertCircle size={20} />
           </div>
-          <span className="text-3xl font-bold mb-1">{statusCounts["Review"]}</span>
-          <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">In Review</span>
+          <span className="text-3xl font-bold mb-1 text-slate-800 dark:text-white">{statusCounts["Review"]}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">In Review</span>
         </div>
         <div className="glass-panel p-5 rounded-xl flex flex-col justify-center items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-slate-500/10 flex items-center justify-center mb-3 text-slate-400">
+          <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-500/10 flex items-center justify-center mb-3 text-slate-600 dark:text-slate-400">
             <Clock size={20} />
           </div>
-          <span className="text-3xl font-bold mb-1">{statusCounts["Not Started"]}</span>
-          <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Not Started</span>
+          <span className="text-3xl font-bold mb-1 text-slate-800 dark:text-white">{statusCounts["Not Started"]}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Not Started</span>
         </div>
       </div>
 
       {/* Row 1: Priority Distribution & Progress by Phase */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="glass-panel p-6 rounded-xl flex flex-col">
-          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-6">Task Priorities</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Task Priorities</h3>
           <div className="flex-1 w-full relative flex items-center justify-center min-h-[220px]">
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
@@ -161,35 +172,36 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-              <span className="text-3xl font-bold text-white">{totalTasks}</span>
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider">Total</span>
+              <span className="text-3xl font-bold text-slate-800 dark:text-white">{totalTasks}</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</span>
             </div>
           </div>
         </div>
 
         <div className="glass-panel p-6 rounded-xl flex flex-col lg:col-span-2">
-          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-6">Progress by Phase</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Progress by Phase</h3>
           <div className="flex-1 w-full min-h-[220px]">
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={phaseData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} />
-                <YAxis stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} domain={[0, 100]} />
-                <Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
+                <XAxis dataKey="name" stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} domain={[0, 100]} />
+                <Tooltip content={<CustomTooltip />} cursor={{fill: 'var(--card-border)'}} />
                 <Bar dataKey="progress" name="Progress" fill="var(--accent-primary)" radius={[4, 4, 0, 0]} maxBarSize={50}>
                   {phaseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={`url(#colorPhase${index % 2})`} />
+                    <Cell key={`cell-${index}`} fill={`url(#colorPhase${index})`} />
                   ))}
                 </Bar>
                 <defs>
-                  <linearGradient id="colorPhase0" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={1}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.6}/>
-                  </linearGradient>
-                  <linearGradient id="colorPhase1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={1}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.6}/>
-                  </linearGradient>
+                  {phaseData.map((_, index) => {
+                    const color = getPhaseColor(index, phaseData.length);
+                    return (
+                      <linearGradient key={`grad-${index}`} id={`colorPhase${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={color} stopOpacity={1}/>
+                        <stop offset="95%" stopColor={color} stopOpacity={0.6}/>
+                      </linearGradient>
+                    );
+                  })}
                 </defs>
               </BarChart>
             </ResponsiveContainer>
@@ -200,14 +212,14 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
       {/* Row 2: Team Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-panel p-6 rounded-xl flex flex-col">
-          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-6">Progress by Person</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Progress by Person</h3>
           <div className="flex-1 w-full min-h-[220px]">
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={personData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} />
-                <YAxis stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} domain={[0, 100]} />
-                <Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
+                <XAxis dataKey="name" stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} domain={[0, 100]} />
+                <Tooltip content={<CustomTooltip />} cursor={{fill: 'var(--card-border)'}} />
                 <Bar dataKey="progress" name="Avg Progress" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
@@ -215,14 +227,14 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
         </div>
 
         <div className="glass-panel p-6 rounded-xl flex flex-col">
-          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-6">Tasks by Person</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Tasks by Person</h3>
           <div className="flex-1 w-full min-h-[220px]">
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={personData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                <XAxis type="number" stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} />
-                <YAxis dataKey="name" type="category" stroke="rgba(255,255,255,0.3)" tick={{fill: '#94a3b8', fontSize: 12}} axisLine={false} tickLine={false} width={80} />
-                <Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" horizontal={false} />
+                <XAxis type="number" stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" stroke="var(--foreground)" tick={{fill: 'var(--notion-text-gray)', fontSize: 12}} axisLine={false} tickLine={false} width={80} />
+                <Tooltip content={<CustomTooltip />} cursor={{fill: 'var(--card-border)'}} />
                 <Bar dataKey="tasks" name="Total Tasks" fill="#f59e0b" radius={[0, 4, 4, 0]} maxBarSize={20} />
               </BarChart>
             </ResponsiveContainer>

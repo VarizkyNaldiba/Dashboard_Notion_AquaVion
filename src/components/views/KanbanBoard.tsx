@@ -40,15 +40,15 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${getStatusColor(status)}`}>
                   {status}
                 </span>
-                <span className="text-sm text-[var(--color-notion-text-gray)] font-medium">
+                <span className="text-sm text-[var(--notion-text-gray)] font-medium">
                   {columnTasks.length}
                 </span>
               </div>
-              <div className="flex items-center gap-1 text-[var(--color-notion-text-gray)]">
-                <button className="p-1 hover:bg-[var(--color-notion-hover)] rounded">
+              <div className="flex items-center gap-1 text-[var(--notion-text-gray)]">
+                <button className="p-1 hover:bg-[var(--notion-hover)] rounded">
                   <Plus size={16} />
                 </button>
-                <button className="p-1 hover:bg-[var(--color-notion-hover)] rounded">
+                <button className="p-1 hover:bg-[var(--notion-hover)] rounded">
                   <MoreHorizontal size={16} />
                 </button>
               </div>
@@ -58,13 +58,13 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
               {columnTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="bg-white dark:bg-[#202020] border border-[var(--color-notion-border)] p-3 rounded-md shadow-sm hover:shadow transition-shadow cursor-pointer group"
+                  className="bg-white dark:bg-[var(--card-bg)] border border-[var(--notion-border)] p-3 rounded-md shadow-sm hover:shadow transition-shadow cursor-pointer group"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <span className="text-sm font-medium leading-tight">{task.title}</span>
                   </div>
                   <div className="flex flex-wrap gap-2 items-center mt-3">
-                    <span className="text-xs text-[var(--color-notion-text-gray)] border border-[var(--color-notion-border)] rounded px-1.5 py-0.5">
+                    <span className="text-xs text-[var(--notion-text-gray)] border border-[var(--notion-border)] rounded px-1.5 py-0.5">
                       {task.wbsCode}
                     </span>
                     {task.categoryTag && (
@@ -80,7 +80,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                       <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-600">
                         {task.person.length > 0 ? task.person[0].charAt(0) : "?"}
                       </div>
-                      <span className="text-xs text-[var(--color-notion-text-gray)] truncate max-w-[80px]">
+                      <span className="text-xs text-[var(--notion-text-gray)] truncate max-w-[80px]">
                         {task.person.join(", ")}
                       </span>
                     </div>
@@ -88,7 +88,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                 </div>
               ))}
               
-              <button className="flex items-center gap-2 text-sm text-[var(--color-notion-text-gray)] hover:bg-[var(--color-notion-hover)] p-2 rounded transition-colors text-left w-full mt-1">
+              <button className="flex items-center gap-2 text-sm text-[var(--notion-text-gray)] hover:bg-[var(--notion-hover)] p-2 rounded transition-colors text-left w-full mt-1">
                 <Plus size={16} />
                 New
               </button>
