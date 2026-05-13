@@ -78,10 +78,10 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                   <div className="mt-3 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-600">
-                        {task.person.charAt(0)}
+                        {task.person.length > 0 ? task.person[0].charAt(0) : "?"}
                       </div>
                       <span className="text-xs text-[var(--color-notion-text-gray)] truncate max-w-[80px]">
-                        {task.person}
+                        {task.person.join(", ")}
                       </span>
                     </div>
                   </div>

@@ -54,9 +54,9 @@ export default function TableView({ tasks }: TableViewProps) {
               <td className="py-2.5 px-3">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-600">
-                    {task.person.charAt(0)}
+                    {task.person.length > 0 ? task.person[0].charAt(0) : "?"}
                   </div>
-                  <span>{task.person}</span>
+                  <span>{task.person.join(", ")}</span>
                 </div>
               </td>
               <td className="py-2.5 px-3 text-[var(--color-notion-text-gray)]">{task.phase}</td>
