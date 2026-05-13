@@ -131,7 +131,7 @@ export default function Home() {
             <Activity size={20} className="text-white" />
           </div>
           <span className="font-bold text-xl hidden lg:block tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-            AquaVion Progress Tracker
+            AquaVion
           </span>
         </div>
 
