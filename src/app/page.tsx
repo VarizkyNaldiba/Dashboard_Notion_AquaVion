@@ -78,14 +78,14 @@ export default function Home() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Done":
-        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        return "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20";
       case "In Progress":
-        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
+        return "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20";
       case "Review":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20";
       case "Not Started":
       default:
-        return "bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-500/20";
+        return "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/20";
     }
   };
 
@@ -169,7 +169,7 @@ export default function Home() {
         <header className="h-20 glass-panel border-t-0 border-x-0 flex items-center justify-between px-8 z-10 flex-shrink-0">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">
-              {activeMenu === "dashboard" ? "Project Overview" : "Team & Tasks"}
+              {activeMenu === "dashboard" ? "Project Overview" : "Task Deliverables"}
             </h1>
             {usingMock && !loading && (
               <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-amber-500/10 border border-slate-200 dark:border-amber-500/20 text-slate-600 dark:text-amber-500 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
@@ -334,6 +334,9 @@ export default function Home() {
                               <th className="font-semibold text-slate-700 dark:text-slate-300 py-4 px-6 w-[120px] cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors select-none" onClick={() => handleSort('phase')}>
                                 Phase <SortIcon columnKey="phase" />
                               </th>
+                              <th className="font-semibold text-slate-700 dark:text-slate-300 py-4 px-6 w-[120px] cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors select-none" onClick={() => handleSort('priority')}>
+                                Priority <SortIcon columnKey="priority" />
+                              </th>
                               <th className="font-semibold text-slate-700 dark:text-slate-300 py-4 px-6 w-[120px] cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors select-none" onClick={() => handleSort('progress')}>
                                 Progress <SortIcon columnKey="progress" />
                               </th>
@@ -370,6 +373,16 @@ export default function Home() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-6 text-slate-500 dark:text-slate-400">{task.phase}</td>
+                                  <td className="py-4 px-6">
+                                    <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                                      task.priority === "High" ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400" :
+                                      task.priority === "Medium" ? "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400" :
+                                      task.priority === "Low" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" :
+                                      "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                                    }`}>
+                                      {task.priority || "Normal"}
+                                    </span>
+                                  </td>
                                   <td className="py-4 px-6">
                                     <div className="flex items-center gap-2">
                                       <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 max-w-[60px]">
