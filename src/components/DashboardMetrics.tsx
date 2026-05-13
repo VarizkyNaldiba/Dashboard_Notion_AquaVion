@@ -70,6 +70,15 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
     color: PRIORITY_COLORS[key] || COLORS[0]
   }));
 
+  const completedTasks = statusCounts["Done"] || 0;
+  const uncompletedTasks = totalTasks - completedTasks;
+  const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  const completionData = [
+    { name: "Completed", value: completedTasks, color: "#10b981" },
+    { name: "Remaining", value: uncompletedTasks, color: "var(--card-border)" }
+  ];
+
   const phaseData = Object.keys(phaseProgress).map(key => ({
     name: key,
     fullName: phaseProgress[key].fullName,
@@ -146,8 +155,38 @@ export default function DashboardMetrics({ tasks }: MetricsProps) {
         </div>
       </div>
 
-      {/* Row 1: Priority Distribution & Progress by Phase */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Row 1: Completion Percentage, Priority Distribution & Progress by Phase */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="glass-panel p-6 rounded-xl flex flex-col">
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Task Completion</h3>
+          <div className="flex-1 w-full relative flex items-center justify-center min-h-[220px]">
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={completionData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={65}
+                  outerRadius={85}
+                  startAngle={90}
+                  endAngle={-270}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {completionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-4xl font-bold text-emerald-600 dark:text-emerald-500">{completionPercentage}%</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider">Completed</span>
+            </div>
+          </div>
+        </div>
+
         <div className="glass-panel p-6 rounded-xl flex flex-col">
           <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-6">Task Priorities</h3>
           <div className="flex-1 w-full relative flex items-center justify-center min-h-[220px]">
